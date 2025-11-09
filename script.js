@@ -11,7 +11,7 @@ function fetchUsers() {
         })
         .then(function (data) {
             allUsers = data;
-            console.log(allUsers)
+            errorMsg.textContent = "";
             renderUsers(allUsers);
         })
         .catch(function () {
@@ -29,18 +29,18 @@ function createUserItem(person) {
     li.appendChild(email);
     const company = document.createTextNode(` - ${person.company.name}`);
     li.appendChild(company);
-    moreInfoButton(person, li);
+    moreInfoButton(li, person);
     return li;
 }
 
-function moreInfoButton(person, li) {
+function moreInfoButton(li, person) {
     const btn = document.createElement("button");
     btn.textContent = "More info";
     li.appendChild(btn);
     btn.addEventListener("click", function () {
         const info = li.querySelector(".extra-info");
         if (!info) {
-            moreInfoContent(person, li);
+            moreInfoContent(li, person);
             btn.textContent = "X";
         } else {
             info.remove();
@@ -49,7 +49,7 @@ function moreInfoButton(person, li) {
     })
 }
 
-function moreInfoContent(person, li) {
+function moreInfoContent(li, person) {
     const p = document.createElement("p");
     p.classList.add("extra-info");
     p.textContent = `Phone: ${person.phone}\nWebsite: ${person.website}\n${person.company.catchPhrase}`;
@@ -73,6 +73,11 @@ function filterUsers() {
             person.company.name.toLowerCase().includes(term));
     })
     renderUsers(filtered);
+    if(filtered.length === 0) {
+        errorMsg.textContent = "No users found"
+    } else {
+        errorMsg.textContent = "";
+    }
 }
 
 // -------------------Listeners and calls ----------------------
