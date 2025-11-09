@@ -1,5 +1,3 @@
-
-
 const input = document.getElementById("input");
 const list = document.getElementById("list");
 const errorMsg = document.getElementById("errorMsg");
@@ -13,6 +11,7 @@ function fetchUsers() {
         })
         .then(function (data) {
             allUsers = data;
+            console.log(allUsers)
             renderUsers(allUsers);
         })
         .catch(function () {
@@ -20,7 +19,7 @@ function fetchUsers() {
         })
 }
 
-// ------------- Helpers --------------
+// ------------------- Helpers --------------
 function createUserItem(person) {
     const li = document.createElement("li");
     li.textContent = `${person.name} | `;
@@ -30,25 +29,34 @@ function createUserItem(person) {
     li.appendChild(email);
     const company = document.createTextNode(` - ${person.company.name}`);
     li.appendChild(company);
+    moreInfoButton(person, li);
+    return li;
+}
+
+function moreInfoButton(person, li) {
     const btn = document.createElement("button");
     btn.textContent = "More info";
     li.appendChild(btn);
     btn.addEventListener("click", function () {
-        const info = li.querySelector(".info-btn");
+        const info = li.querySelector(".extra-info");
         if (!info) {
-            const p = document.createElement("p");
-            p.classList.add("info-btn");
-            p.textContent = `${person.phone} | ${person.website}`;
-            li.appendChild(p);
+            moreInfoContent(person, li);
             btn.textContent = "X";
         } else {
             info.remove();
             btn.textContent = "More info";
         }
     })
-    return li;
 }
-// ----------------- Control functions ----------------
+
+function moreInfoContent(person, li) {
+    const p = document.createElement("p");
+    p.classList.add("extra-info");
+    p.textContent = `Phone: ${person.phone}\nWebsite: ${person.website}\n${person.company.catchPhrase}`;
+    li.appendChild(p);
+}
+
+// --------------------- Control functions ----------------
 function renderUsers(usersArray) {
     list.innerHTML = "";
     usersArray.forEach(function (person) {
@@ -67,7 +75,7 @@ function filterUsers() {
     renderUsers(filtered);
 }
 
-// --------------Listeners and calls ----------------------
+// -------------------Listeners and calls ----------------------
 
 input.addEventListener("input", filterUsers);
 
