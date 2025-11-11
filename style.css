@@ -49,3 +49,15 @@ button {
 button:hover {
   background: #0056b3;
 }
+
+#clearBtn {
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+#errorMsg,
+#resultsMsg {
+  margin: 4px 0;
+  text-align: center;
+  color: red;
+}
